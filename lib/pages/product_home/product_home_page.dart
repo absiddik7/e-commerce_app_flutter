@@ -26,7 +26,7 @@ class _ProductHomePageState extends State<ProductHomePage> {
             crossAxisCount: 2,
             mainAxisSpacing: 10,
             crossAxisSpacing: 10,
-            childAspectRatio: 0.75,
+            childAspectRatio: 0.55,
           ),
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
