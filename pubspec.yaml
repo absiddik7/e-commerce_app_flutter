@@ -35,6 +35,11 @@ dependencies:
   favorite_button: ^0.0.4
   flutter_rating_bar: ^4.0.1
   input_quantity: ^1.1.2
+  http: ^0.13.5
+  quantity_input: ^1.0.2
+  counter_button: ^1.0.1
+  fancy_shimmer_image: ^2.0.2
+  path_provider: ^2.0.11
 
 
   # The following adds the Cupertino Icons font to your application.

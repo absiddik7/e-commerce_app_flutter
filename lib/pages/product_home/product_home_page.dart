@@ -1,5 +1,8 @@
+import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:favorite_button/favorite_button.dart';
+import 'package:shopping/data/api/api.dart';
+import 'package:shopping/data/models/product_model.dart';
 import 'package:shopping/pages/product_details/product_details_page.dart';
 
 class ProductHomePage extends StatefulWidget {
@@ -10,23 +13,28 @@ class ProductHomePage extends StatefulWidget {
 }
 
 class _ProductHomePageState extends State<ProductHomePage> {
+  final searchController = TextEditingController();
+  var searchItem = '';
   bool fav = false;
+  List<ProductsModel> allProducts = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ProductHomePage'),
+        title: const Text('Home'),
         centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: GridView.builder(
-          itemCount: 10,
+          itemCount: allProducts.length,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 10,
-            childAspectRatio: 0.55,
+            mainAxisSpacing: 5,
+            crossAxisSpacing: 5,
+            mainAxisExtent: 310,
+            //childAspectRatio: MediaQuery.of(context).size.aspectRatio * 0.62,
           ),
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
@@ -34,7 +42,16 @@ class _ProductHomePageState extends State<ProductHomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const ProductDetailsPage(),
+                    builder: (context) => ProductDetailsPage(
+                      productName: allProducts[index].title.toString(),
+                      productImage: allProducts[index].image.toString(),
+                      productPrice: allProducts[index].price!.toDouble(),
+                      productDescription:
+                          allProducts[index].description.toString(),
+                      productRating:
+                          allProducts[index].rating!.rate!.toDouble(),
+                      productCategory: allProducts[index].category.toString(),
+                    ),
                   ),
                 );
               },
@@ -59,20 +76,33 @@ class _ProductHomePageState extends State<ProductHomePage> {
                               children: [
                                 Expanded(
                                   child: ClipRRect(
-                                    borderRadius: const BorderRadius.only(
-                                      bottomLeft: Radius.circular(0),
-                                      bottomRight: Radius.circular(0),
-                                      topLeft: Radius.circular(8),
-                                      topRight: Radius.circular(8),
-                                    ),
-                                    //product image
-                                    child: Image.network(
-                                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNETWKjUSYf-T8Sf-_sISoARXrUQQ7uAFNaA&usqp=CAU',
-                                      width: 150,
-                                      height: 150,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
+                                      borderRadius: const BorderRadius.only(
+                                        bottomLeft: Radius.circular(0),
+                                        bottomRight: Radius.circular(0),
+                                        topLeft: Radius.circular(8),
+                                        topRight: Radius.circular(8),
+                                      ),
+                                      //product image
+                                      child: FancyShimmerImage(
+                                        width: 100,
+                                        height: 180,
+                                        imageBuilder:
+                                            (context, imageProvider) =>
+                                                Container(
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                              image: imageProvider,
+                                              fit: BoxFit.fill,
+                                            ),
+                                          ),
+                                        ),
+                                        imageUrl:
+                                            allProducts[index].image.toString(),
+                                        shimmerBaseColor: Colors.grey[300]!,
+                                        shimmerHighlightColor:
+                                            Colors.blue[300]!,
+                                        shimmerBackColor: Colors.red[300]!,
+                                      )),
                                 ),
                               ],
                             ),
@@ -82,9 +112,12 @@ class _ProductHomePageState extends State<ProductHomePage> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text(
-                                    "John Hardy Women's Legends Naga Gold & Silver Dragon Station Chain Bracelet",
-                                    style: TextStyle(
+                                  Text(
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                    softWrap: true,
+                                    allProducts[index].title.toString(),
+                                    style: const TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w600,
                                     ),
@@ -93,11 +126,12 @@ class _ProductHomePageState extends State<ProductHomePage> {
                                     height: 5,
                                   ),
                                   // category
-                                  const Text(
-                                    'jewelery',
-                                    style: TextStyle(
+                                  Text(
+                                    //'jewelery',
+                                    allProducts[index].category.toString(),
+                                    style: const TextStyle(
                                       color: Color(0xFF8B97A2),
-                                      fontSize: 12,
+                                      fontSize: 14,
                                     ),
                                   ),
                                   const SizedBox(
@@ -108,17 +142,20 @@ class _ProductHomePageState extends State<ProductHomePage> {
                                     children: [
                                       const Icon(
                                         Icons.star,
-                                        color: Colors.orange,
-                                        size: 16,
+                                        color: Colors.amber,
+                                        size: 18,
                                       ),
                                       Row(
-                                        children: const [
+                                        children: [
                                           Text(
-                                            '4.1',
+                                            allProducts[index]
+                                                .rating!
+                                                .rate
+                                                .toString(),
                                           ),
                                           Text(
-                                            '(205)',
-                                            style: TextStyle(
+                                            '(${allProducts[index].rating!.count.toString()})',
+                                            style: const TextStyle(
                                               color: Color(0xFF8B97A2),
                                               fontSize: 12,
                                             ),
@@ -131,9 +168,10 @@ class _ProductHomePageState extends State<ProductHomePage> {
                                     height: 5,
                                   ),
                                   // product price
-                                  const Text(
-                                    '\$ 22.3',
-                                    style: TextStyle(
+                                  Text(
+                                    '\$ ${allProducts[index].price.toString()}',
+                                    style: const TextStyle(
+                                      color: Colors.deepOrange,
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -148,39 +186,10 @@ class _ProductHomePageState extends State<ProductHomePage> {
                             right: 5,
                             // favorite button
 
-                            child: CircleAvatar(
-                              backgroundColor: Colors.white,
-                              radius: 18,
-                              child: FavoriteButton(
-                                iconSize: 40,
-                                isFavorite: fav,
-                                valueChanged: (_isFavorite) {
-                                  // var x = controller.products[index];
-                                  // var y = favController.favItems;
-
-                                  // if (_isFavorite) {
-                                  //   if (y.contains(x)) {
-                                  //     final snackBar = SnackBar(
-                                  //       content: const Text(
-                                  //           'Already in the favorite!'),
-                                  //       action: SnackBarAction(
-                                  //         label: 'Ok',
-                                  //         onPressed: () {
-                                  //           //do some thing
-                                  //         },
-                                  //       ),
-                                  //     );
-                                  //     ScaffoldMessenger.of(context)
-                                  //         .showSnackBar(snackBar);
-                                  //   } else {
-                                  //     favController.favItems
-                                  //         .add(controller.products[index]);
-                                  //   }
-                                  // } else {
-                                  //   favController.favItems.removeAt(index);
-                                  // }
-                                },
-                              ),
+                            child: FavoriteButton(
+                              iconSize: 40,
+                              isFavorite: fav,
+                              valueChanged: (_isFavorite) {},
                             )),
                       ],
                     ),
