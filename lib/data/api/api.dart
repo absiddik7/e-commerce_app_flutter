@@ -15,14 +15,11 @@ class ApiData {
         Uri.parse(url),
       );
 
-      
-
       var jsonData = jsonDecode(response.body);
       jsonData.forEach((element) {
         ProductsModel productsModel = ProductsModel.fromJson(element);
         products.add(productsModel);
 
-        //print("products.length : ${products.length}");
       });
     } catch (e) {
       print(e);

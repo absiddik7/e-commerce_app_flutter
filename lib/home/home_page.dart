@@ -37,12 +37,7 @@ class _HomePageState extends State<HomePage> {
               tabBackgroundColor: Colors.deepOrange.shade200,
               haptic: true,
               rippleColor: Colors.green,
-              hoverColor: Colors.grey,
-              //tabBorderRadius: 15,
-              //tabActiveBorder: Border.all(color: Colors.black, width: 1),
-              // tab button shadow
-              //curve: Curves.easeOutExpo, // tab animation curves
-              
+              hoverColor: Colors.grey,    
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
               selectedIndex: _selectedIndex,
               onTabChange: (index) {

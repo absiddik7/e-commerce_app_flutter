@@ -2,8 +2,8 @@ import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:favorite_button/favorite_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:input_quantity/input_quantity.dart';
 import 'package:counter_button/counter_button.dart';
+import 'package:badges/badges.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   const ProductDetailsPage(
@@ -50,9 +50,37 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ProductDetailsPage'),
-        centerTitle: true,
+        backgroundColor: Colors.white,
         elevation: 0,
+        iconTheme: const IconThemeData(
+          color: Colors.black,
+        ),
+       
+        centerTitle: true,
+        actions: [
+          Container(
+            margin: const EdgeInsets.only(right: 10),
+            child: Badge(
+              toAnimate: false,
+              shape: BadgeShape.circle,
+              position: BadgePosition.topEnd(top: 0, end: -15),
+              badgeColor: Colors.deepOrange,
+              borderRadius: BorderRadius.circular(8),
+              badgeContent: const Text('0',
+                  style: TextStyle(fontSize: 10, color: Colors.white)),
+              child: const Icon(
+                Icons.shopping_cart,
+              ),
+            ),
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.share,
+              color: Colors.black,
+            ),
+          ),
+        ],
       ),
       body: Column(
         children: [
